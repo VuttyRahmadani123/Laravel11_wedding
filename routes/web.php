@@ -12,8 +12,10 @@ use App\Http\Controllers\UserController;
 Route::get('user/login', [UserController::class, 'login'])->name('login');
 Route::post('user/login', [UserController::class, 'dologin'])->name('login.post');
 Route::get('user/register', [UserController::class, 'register'])->name('register');
-Route::post('user/register', [UserController::class, 'doregister'])->name('doregister');
-Route::get('user/logout', [UserController::class, 'login'])->name('login');
+Route::post('user/register', [UserController::class, 'doregister'])->name('register.post');
+
+
+Route::post('user/logout', [UserController::class, 'logout'])->name('logout');
 
 
 
@@ -46,7 +48,9 @@ Route::delete('admin/pesanandetail/{id}/destroy', [PesanandetailController::clas
 // route untuk pelanggan
 Route::get('/', function () {
     return view('index');
-});
+})->name('index');
+
+
 
 
 

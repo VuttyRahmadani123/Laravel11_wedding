@@ -1,5 +1,7 @@
 @extends('layout.navbar')
 
 @section('content')
-    <h2>Halaman Home</h2>
-@endsection
+    <div class="container-fluid mt-5">
+        <h3>Home</h3>
+    </div>
+@endsection 

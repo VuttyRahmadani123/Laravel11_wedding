@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pelanggan;
 use App\Models\User;
 use App\Models\UserVerify;
 use Carbon\Carbon;
@@ -34,17 +35,9 @@ class UserController extends Controller
         if(Auth::check()) {
             // Redirect berdasarkan role pengguna
             if(Auth::user()->role == 'pelanggan') {
-                if(Auth::user()->email_verified_at == ''){
-                    Auth::logout();
-                    return redirect()->route('login')->with('error' , 'Email belum terverifikasi, silahkan cek email anda kembali!!!')->withInput();
-                }else
-                    return redirect()->route('index');
+                return redirect()->route('index');
             }elseif(Auth::user()->role == 'admin') {
-                if(Auth::user()->email_verified_at == ''){
-                    Auth::logout();
-                    return redirect()->route('login')->with('error' , 'Email belum terverifikasi, silahkan cek email anda kembali!!!')->withInput();
-                }else
-                    return redirect()->route('admin.dashboard');
+               return redirect()->route('admin.dashboard');
             }
         }
     }
@@ -54,63 +47,40 @@ class UserController extends Controller
     public function register(){
         return view('user.register');
     }
-    public function doregister(Request $request){
+    public function doregister(Request $request)
+    {
         $request->validate([
-            'email'=>'required|string|email:rfc,dns|max:50|unique:users,email',
-            'username'=>'required|max:50|min:3',
-            'password'=>'required|string|min:5',
-            'password-confirm'=>'required_with:password|same:password'
-        ],[
-            'email.required'=>'Email Wajib Diisi',
-            'email.string'=>'Email Harus String',
-            'email.email'=>'Format email harus valid',
-            'email.max'=>'Maximal email 25 karakter',
-            'email.min'=>'Manimal email 5 karakter',
-            'email.unique'=>'Email ini sudah terdaftar di database',
-            'username.required'=>'Kolom Username Wajib Diisi',
-            'username.min'=>'Username Minimum 5 Karakter',
-            'username.max'=>'Username Maximun 50 Karakter',
-            'password.string'=>'Password Hanya String Yang Diperbolehkan',
-            'password.min'=>'Password Minimum 5 Karakter',
-            'password-confirm.required_with'=>'Password Konfirmasi Harus Diisi',
-            'password-confirm.same'=>'Password Konfirmasi Tidak Sama!!!'
+            'username' => 'required',
+            'email' => 'required|string|email:rfc,dns|max:50|unique:users,email',
+            'password' => 'required|string|min:5',
+            'password-confirm' => 'required_with:password|same:password'
+        ], [
+            'email.required' => 'Email wajib diisi',
+            'email.string' => 'Email harus berupa string',
+            'email.email' => 'Format email harus valid',
+            'email.max' => 'Maksimal email 50 karakter',
+            'email.unique' => 'Email ini sudah terdaftar di database',
+            'password.string' => 'Password harus berupa string',
+            'password.min' => 'Password minimal 5 karakter',
+            'password-confirm.required_with' => 'Konfirmasi password harus diisi',
+            'password-confirm.same' => 'Konfirmasi password tidak sama dengan password'
         ]);
-
-        $data = [
-            'username'=>$request->input('username'),
-            'email'=>$request->input('email'),
-            'password'=>bcrypt($request->input('password')),
+    
+        // Buat Pelanggan baru
+        User::create([
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
             'role' => 'pelanggan'
-        ];
-        User::create($data);
-        // pengecekan token
-       
-
-        return redirect()->route('login')->with('success','Email Verifikasi telah dikirim, silahkan cek email anda!!!')->withInput();
+        ]);
+    
+        return redirect()->route('login')
+            ->with('success', 'Registrasi berhasil, silakan login!')
+            ->withInput();
     }
+    
     public function logout(){
         Auth::logout();
-        return redirect()->route('index');
-    }
-    public function verifyAccount($token){
-        $checkuser = UserVerify::where('token',$token)->first();
-        if(!is_null($checkuser)){
-            $email = $checkuser->email;
-            
-            $datauser = User::where('email',$email)->first();
-            if($datauser->email_verified_at){
-                $message = "Akun anda sudah terverifikasi sebelumnya";
-            }else{
-                $data = [
-                    'email_verified_at'=>Carbon::now()
-                ];
-                User::where('email',$email)->update($data);
-                UserVerify::where('email',$email)->delete();
-                $message = "Akun anda sudah terverifikasi, silahkan login";
-            }
-            return redirect()->route('login')->with('success',$message);
-        }else{
-            return redirect()->route('login')->withErrors('Link token tidak valid!!!');
-        }
+        return redirect()->route('login');  
     }
 }

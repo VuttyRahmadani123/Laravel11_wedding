@@ -46,14 +46,14 @@
                                 <li><a href="#" class="dropdown-item"><i class="bi bi-person-circle"></i> Profile</a></li>
                                 <li><a href="#" class="dropdown-item"><i class="bi bi-cart"></i> Pesanan</a></li>
                                 <li>
-                                    <form method="POST" action="#" id="logout-form">
+                                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                         @csrf
                                         <button class="dropdown-item" type="submit"><i class="bi bi-box-arrow-right"></i> Logout</button>
                                     </form>
                                 </li>
                             @else
-                                <li><a href="#" class="dropdown-item"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
-                                <li><a href="#" class="dropdown-item"><i class="bi bi-person-plus"></i> Register</a></li>
+                                <li><a href="{{ route('login') }}" class="dropdown-item"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+                                <li><a href="{{ route('register') }}" class="dropdown-item"><i class="bi bi-person-plus"></i> Register</a></li>
                             @endauth
                         @endif
                     </ul>
