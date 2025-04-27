@@ -160,21 +160,17 @@
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <ul class="navbar-nav ms-auto">
                             <li class="nav-item">
-                                {{--  @if(Auth::user()->pemilik)
-                                    <a class="nav-link">Hi, {{ Str::limit(Auth::user()->pemilik->name) }}</a>
-                                @elseif(Auth::user()->admin)
-                                    <a class="nav-link">Hi, {{ Str::limit(Auth::user()->karyawan->name) }}</a>
-                                @endif  --}}
+                                <a class="nav-link">Hi, {{ Str::limit(Auth::user()->username) }}</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link" href="#" data-bs-toggle="dropdown">
                                     <i class="fa-solid fa-users"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                    <a href="" class="dropdown-item">
+                                    <a href="{{ route('index') }}" class="dropdown-item">
                                         <i class="fas fa-home"></i> Halaman Utama
                                     </a>
-                                    <form method="POST" action="" id="logout-form">
+                                    <form method="POST" action="{{ route('logout') }}" id="logout-form">
                                         @csrf
                                         <button class="dropdown-item text-danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             <i class="fas fa-sign-out-alt"></i> Logout

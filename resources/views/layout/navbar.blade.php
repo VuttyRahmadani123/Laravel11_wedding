@@ -38,7 +38,9 @@
                 </ul>
                 <div class="ms-auto dropdown">
                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown">
-                        <span>Account</span>
+                        <span>
+                            <a class="nav-link">Hi, {{ Str::limit(Auth::user()->username) }}</a>
+                        </span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
                         @if (Route::has('login'))

@@ -81,12 +81,6 @@ class UserController extends Controller
     
     public function logout(){
         Auth::logout();
-<<<<<<< HEAD
-        return redirect()->route('login');  
+        return redirect()->route('login');
     }
-=======
-        return redirect()->route('index');
-    }
-    
->>>>>>> b74b8a26624caaf4e11129c6b6467ebcbc8bb128
 }
