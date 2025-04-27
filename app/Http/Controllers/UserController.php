@@ -92,25 +92,5 @@ class UserController extends Controller
         Auth::logout();
         return redirect()->route('index');
     }
-    public function verifyAccount($token){
-        $checkuser = UserVerify::where('token',$token)->first();
-        if(!is_null($checkuser)){
-            $email = $checkuser->email;
-            
-            $datauser = User::where('email',$email)->first();
-            if($datauser->email_verified_at){
-                $message = "Akun anda sudah terverifikasi sebelumnya";
-            }else{
-                $data = [
-                    'email_verified_at'=>Carbon::now()
-                ];
-                User::where('email',$email)->update($data);
-                UserVerify::where('email',$email)->delete();
-                $message = "Akun anda sudah terverifikasi, silahkan login";
-            }
-            return redirect()->route('login')->with('success',$message);
-        }else{
-            return redirect()->route('login')->withErrors('Link token tidak valid!!!');
-        }
-    }
+    
 }
