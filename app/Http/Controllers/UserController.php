@@ -84,23 +84,7 @@ class UserController extends Controller
         ];
         User::create($data);
         // pengecekan token
-        $cekToken = UserVerify::where('email',$request->input('email'))->first();
-        if($cekToken){
-            // jika token ditemukan, maka hapus
-            UserVerify::where('email',$request->input('email'))->delete();
-        }
-        // buat token baru
-        $token = Str::uuid();
-        // setelah proses delete token berhasil, masukkan data baru
-        $data = [ 
-            'email'=>$request->input('email'),
-            'token'=>$token
-        ];
-        UserVerify::create( $data);
-        Mail::send('user.email-verification',['token'=>$token],function($message) use($request){
-            $message->to($request->input('email'));
-            $message->subject('PT.Sinamar Transport Mandiri');
-        });
+       
 
         return redirect()->route('login')->with('success','Email Verifikasi telah dikirim, silahkan cek email anda!!!')->withInput();
     }
