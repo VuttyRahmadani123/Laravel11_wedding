@@ -15,7 +15,7 @@ class UserController extends Controller
     public function login(){
         return view('user.login');
     }
-    public function doLogin(Requestuest $request){
+    public function doLogin(Request $request){
     // Validasi input
     $request->validate([
         'email' => 'required|email',
